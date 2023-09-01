@@ -1,17 +1,38 @@
-# This is a sample Python script.
+# Projet Planning Nettoyage Python
+# Made by Christophe FOnseca DIogo
+# 01.09.2023
 
-# Press Maj+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+banner = ("Merci de choisir une option : \n\n"
+          "1. Afficher l’ordre en classe\n"
+          "2. Générer le planning « Ordre en classe »\n"
+          "3. Valider l’ordre en classe de la semaine\n"
+          "4. Supprimer un élève de la liste\n"
+          "5. Ajouter un élève de la liste\n"
+          "6. Générer le document « Ordre en classe »\n"
+          "7. Sortir du menu\n")
+
+print(banner)
+
+while True:
+    try:
+        choice = int(input("Votre option : \n"))
+        if choice < 1 or choice > 7:
+            print("Choix inexistant merci de rentrer un bon choix ci-dessous \n")
+            print(banner)
+        else:
+            print("Merci de votre choix mais ce n'est pas encore prêt")
+            break
+        if choice == 7:
+            print("Vous avez quitter le programme\n")
+            exit()
+    except ValueError:
+        print("Merci de rentrer un nombre de la liste \n")
+        print(banner)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
-sdada
+
+
+
