@@ -28,8 +28,3 @@ while True:
     except ValueError:
         print("Merci de rentrer un nombre de la liste \n")
         print(banner)
-
-
-
-
-
