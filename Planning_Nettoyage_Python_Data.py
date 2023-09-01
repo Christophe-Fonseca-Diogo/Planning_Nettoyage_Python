@@ -22,4 +22,4 @@ print("\n")
 with open(filename, 'r') as csvfile:
     csvreader = csv.reader(csvfile)
     for row in csvreader:
-    print(students)
+        print(', '.join(row))
