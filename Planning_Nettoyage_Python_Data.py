@@ -14,6 +14,9 @@ def open_dbconnection():
                                    user='christophe', password='Pa$$w0rd', database='classroom_cleaning',
                                    buffered=True, autocommit=True)
 
+def close_dbconnection():
+    db_connection.close()
+
 
 def add_classes(classes_name, classes_room):
     query = "INSERT INTO classes (name, room) values (%s, %s)"
@@ -23,8 +26,23 @@ def add_classes(classes_name, classes_room):
     cursor.close()
     return inserted_id
 
-def close_dbconnection():
-    db_connection.close()
+
+def get_classe_id(classe_name):
+    query = "SELECT id FROM classes WHERE name = %s"
+    cursor = db_connection.cursor()
+    cursor.execute(query, (classe_name,))
+    row = cursor.fetchone()
+    cursor.close()
+    return row
+
+def add_student(firstname, lastname, student_email,class_id):
+    query = "INSERT INTO students (firstname, lastname, email, class_id) values (%s, %s, %s, %s)"
+    cursor = db_connection.cursor()
+    cursor.execute(query, (firstname, lastname, student_email, class_id))
+    inserted_id = cursor.lastrowid
+    cursor.close()
+    return inserted_id
+
 
 open_dbconnection()
 with open(filename_classes, 'r') as csvfile:
@@ -33,15 +51,22 @@ with open(filename_classes, 'r') as csvfile:
     for row in csvreader:
         add_classes(row[0],row[1])
 
-
-print("\n")
-
-
-
-
 close_dbconnection()
 
 
+open_dbconnection()
+
+with open(filename_students, 'r') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=(";"))
+    next(csvreader, None)
+    for row in csvreader:
+        classes_id = get_classe_id(row[3])
+        if classes_id == None:
+            print("Il manque une valeur dans le document")
+        add_student(row[0],row[1],row[2],classes_id[0])
+
+
+close_dbconnection()
 
 
 # Example from here :
