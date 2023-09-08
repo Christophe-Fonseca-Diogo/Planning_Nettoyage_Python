@@ -56,6 +56,7 @@ close_dbconnection()
 
 open_dbconnection()
 
+
 with open(filename_students, 'r') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=(";"))
     next(csvreader, None)
@@ -63,15 +64,16 @@ with open(filename_students, 'r') as csvfile:
         classes_id = get_classe_id(row[3])
         if classes_id == None:
             print("Il manque une valeur dans le document")
-        add_student(row[0],row[1],row[2],classes_id[0])
+        if len(row) != 4:
+            print("il manque une colonne dans le document")
+        try:
+            add_student(row[0],row[1],row[2],classes_id[0])
+        except:
+            print("Erreur")
 
 
 close_dbconnection()
 
-
-# Example from here :
-# https://dev.mysql.com/doc/connector-python/en/connector-python-example-connecting.html
-# or here https://www.w3schools.com/python/python_mysql_getstarted.asp
 
 
 
