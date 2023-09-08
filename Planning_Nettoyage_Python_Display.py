@@ -1,6 +1,11 @@
 # Projet Planning Nettoyage Python Display
 # Made by Christophe Fonseca Diogo
 # 01.09.2023
+# Version 1
+
+
+from Planning_Nettoyage_Python_Data import *
+
 
 banner = ("Merci de choisir une option : \n\n"
           "1. Afficher l’ordre en classe\n"
@@ -14,17 +19,27 @@ banner = ("Merci de choisir une option : \n\n"
 print(banner)
 
 while True:
+    open_dbconnection()
     try:
         choice = int(input("Votre option : \n"))
         if choice < 1 or choice > 7:
-            print("Choix inexistant merci de rentrer un bon choix ci-dessous \n")
+            print("Choix invalide merci de rentrer un un nombre du menu \n ")
             print(banner)
-        else:
-            print("Merci de votre choix mais ce n'est pas encore prêt")
-            break
+        if choice == 5:
+            print("Vous avez choisi d'ajouter un élève \n")
+            firstname_student = input("Merci de rentrer le prénom de l'élève : ")
+            name_student = input("Merci de rentrer le nom de l'élève : ")
+            classe_student = input("Merci de rentrer la classe de l'élève : ")
+            email_student = input("Merci de rentrer l'email de l'élève : ")
+            add_students_choice(firstname_student,name_student,email_student,classe_student)
+            print("Vous avez bien réussi à ajouter ")
+            print(banner)
         if choice == 7:
             print("Vous avez quitter le programme\n")
             exit()
     except ValueError:
         print("Merci de rentrer un nombre de la liste \n")
         print(banner)
+
+
+

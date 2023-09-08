@@ -9,6 +9,8 @@ import csv
 filename_classes = "classes.csv"
 filename_students = "students.csv"
 
+
+
 def open_dbconnection():
     global db_connection
     db_connection = mysql.connector.connect(host='127.0.0.1', port='3306',
@@ -34,7 +36,7 @@ def get_classe_id(classe_name):
     cursor.execute(query, (classe_name,))
     row = cursor.fetchone()
     cursor.close()
-    return row
+    return row[0]
 
 def add_student(firstname, lastname, student_email,class_id):
     query = "INSERT INTO students (firstname, lastname, email, class_id) values (%s, %s, %s, %s)"
@@ -75,10 +77,18 @@ def open_students_fromcsv():
             if len(row) != 4:
                 print("il manque une colonne dans le document")
             try:
-                add_student(row[0],row[1],row[2],classes_id[0])
+                add_student(row[0],row[1],row[2],classes_id)
             except Exception as exc:
                 print(exc)
 
+
+def add_students_choice(firstname, lastname, student_email, class_id):
+    query = "INSERT INTO students (firstname, lastname, email, class_id) values (%s, %s, %s, %s)"
+    cursor = db_connection.cursor()
+    cursor.execute(query, (firstname, lastname, student_email, get_classe_id(class_id)),)
+    inserted_id = cursor.lastrowid
+    cursor.close()
+    return inserted_id
 
 open_dbconnection()
 delete_data()
