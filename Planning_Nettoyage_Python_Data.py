@@ -56,14 +56,14 @@ def delete_data():
     cursor.execute(query4)
     cursor.close()
 
-def open_classes():
+def open_classes_fromcsv():
     with open(filename_classes, 'r') as csvfile:
         csvreader = csv.reader(csvfile, delimiter=(";"))
         next(csvreader, None)
         for row in csvreader:
             add_classes(row[0],row[1])
 
-def open_students():
+def open_students_fromcsv():
     with open(filename_students, 'r') as csvfile:
         csvreader = csv.reader(csvfile, delimiter=(";"))
         next(csvreader, None)
@@ -84,10 +84,10 @@ delete_data()
 close_dbconnection()
 
 open_dbconnection()
-open_classes()
+open_classes_fromcsv()
 close_dbconnection()
 
 
 open_dbconnection()
-open_students()
+open_students_fromcsv()
 close_dbconnection()
