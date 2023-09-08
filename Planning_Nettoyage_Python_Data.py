@@ -1,6 +1,7 @@
 # Projet Planning Nettoyage Python Data
 # Made by Christophe Fonseca Diogo
 # 01.09.2023
+# Version 1
 
 import mysql.connector
 import csv
