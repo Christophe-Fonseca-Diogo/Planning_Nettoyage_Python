@@ -56,51 +56,38 @@ def delete_data():
     cursor.execute(query4)
     cursor.close()
 
+def open_classes():
+    with open(filename_classes, 'r') as csvfile:
+        csvreader = csv.reader(csvfile, delimiter=(";"))
+        next(csvreader, None)
+        for row in csvreader:
+            add_classes(row[0],row[1])
+
+def open_students():
+    with open(filename_students, 'r') as csvfile:
+        csvreader = csv.reader(csvfile, delimiter=(";"))
+        next(csvreader, None)
+        for row in csvreader:
+            classes_id = get_classe_id(row[3])
+            if classes_id == None:
+                print("Il manque une valeur dans le document")
+            if len(row) != 4:
+                print("il manque une colonne dans le document")
+            try:
+                add_student(row[0],row[1],row[2],classes_id[0])
+            except Exception as exc:
+                print(exc)
+
+
 open_dbconnection()
 delete_data()
 close_dbconnection()
 
 open_dbconnection()
-with open(filename_classes, 'r') as csvfile:
-    csvreader = csv.reader(csvfile, delimiter=(";"))
-    next(csvreader, None)
-    for row in csvreader:
-        add_classes(row[0],row[1])
-
+open_classes()
 close_dbconnection()
 
 
 open_dbconnection()
-
-
-with open(filename_students, 'r') as csvfile:
-    csvreader = csv.reader(csvfile, delimiter=(";"))
-    next(csvreader, None)
-    for row in csvreader:
-        classes_id = get_classe_id(row[3])
-        if classes_id == None:
-            print("Il manque une valeur dans le document")
-        if len(row) != 4:
-            print("il manque une colonne dans le document")
-        try:
-            add_student(row[0],row[1],row[2],classes_id[0])
-        except Exception as exc:
-            print(exc)
-
-
-
+open_students()
 close_dbconnection()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
