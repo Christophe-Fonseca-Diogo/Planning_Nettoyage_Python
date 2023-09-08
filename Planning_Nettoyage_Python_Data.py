@@ -43,6 +43,22 @@ def add_student(firstname, lastname, student_email,class_id):
     cursor.close()
     return inserted_id
 
+def delete_data():
+    query = "SET FOREIGN_KEY_CHECKS = 0"
+    query2 = "TRUNCATE table classes"
+    query3 = "TRUNCATE table students"
+    query4 = "SET FOREIGN_KEY_CHECKS = 1"
+
+    cursor = db_connection.cursor()
+    cursor.execute(query)
+    cursor.execute(query2)
+    cursor.execute(query3)
+    cursor.execute(query4)
+    cursor.close()
+
+open_dbconnection()
+delete_data()
+close_dbconnection()
 
 open_dbconnection()
 with open(filename_classes, 'r') as csvfile:
@@ -68,8 +84,9 @@ with open(filename_students, 'r') as csvfile:
             print("il manque une colonne dans le document")
         try:
             add_student(row[0],row[1],row[2],classes_id[0])
-        except:
-            print("Erreur")
+        except Exception as exc:
+            print(exc)
+
 
 
 close_dbconnection()
