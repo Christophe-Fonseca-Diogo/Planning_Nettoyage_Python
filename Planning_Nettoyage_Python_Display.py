@@ -32,7 +32,7 @@ while True:
             classe_student = input("Merci de rentrer la classe de l'élève : ")
             email_student = input("Merci de rentrer l'email de l'élève : ")
             add_students_choice(firstname_student,name_student,email_student,classe_student)
-            print("Vous avez bien réussi à ajouter ")
+            print("Vous avez bien réussi à ajouter l'élève !")
             print(banner)
         if choice == 7:
             print("Vous avez quitter le programme\n")
