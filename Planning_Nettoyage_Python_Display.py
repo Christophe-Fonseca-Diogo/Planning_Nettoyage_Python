@@ -11,8 +11,14 @@ def ask_infos_add():
     print("Vous avez choisi d'ajouter un élève \n")
     firstname_student = input("Merci de rentrer le prénom de l'élève : ")
     name_student = input("Merci de rentrer le nom de l'élève : ")
-    classe_student = input("Merci de rentrer la classe de l'élève : ")
+    while True:
+        try :
+            classe_student = get_classe_id(input("Merci de rentrer la classe de l'élève : "))
+            break
+        except:
+            print("Merci de rentrer une classe valide")
     email_student = input("Merci de rentrer l'email de l'élève : ")
+
     if firstname_student==None or name_student==None or classe_student==None or email_student == None:
         print("Il manque une information !")
         print(banner)

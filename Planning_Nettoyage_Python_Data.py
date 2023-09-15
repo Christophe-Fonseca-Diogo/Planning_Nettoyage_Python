@@ -21,7 +21,7 @@ open_dbconnection()
 def add_students_choice(firstname, lastname, student_email, class_id):
     query = "INSERT INTO students (firstname, lastname, email, class_id) values (%s, %s, %s, %s)"
     cursor = db_connection.cursor()
-    cursor.execute(query, (firstname, lastname, student_email, get_classe_id(class_id)),)
+    cursor.execute(query, (firstname, lastname, student_email, class_id),)
     inserted_id = cursor.lastrowid
     cursor.close()
     return inserted_id
