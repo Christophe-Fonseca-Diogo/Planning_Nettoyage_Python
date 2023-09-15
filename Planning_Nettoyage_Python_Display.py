@@ -3,13 +3,17 @@
 # 01.09.2023
 # Version 1
 from Planning_Nettoyage_Python_Data import *
+from Planning_Nettoyage_Python_Importation import *
+import mysql.connector
+
 def ask_infos_add():
+    open_dbconnection()
     print("Vous avez choisi d'ajouter un élève \n")
     firstname_student = input("Merci de rentrer le prénom de l'élève : ")
     name_student = input("Merci de rentrer le nom de l'élève : ")
     classe_student = input("Merci de rentrer la classe de l'élève : ")
     email_student = input("Merci de rentrer l'email de l'élève : ")
-    if firstname_student or name_student or classe_student or email_student == None:
+    if firstname_student==None or name_student==None or classe_student==None or email_student == None:
         print("Il manque une information !")
         print(banner)
     else:
@@ -27,10 +31,11 @@ def ask_infos_delete():
     if firstname_student or name_student or email_student or classe_student == None:
         print("Il manque une information !")
         print(banner)
-    delete_students_choice(firstname_student, name_student, email_student, classe_student)
-    print(
-        f"Vous avez bien réussi à supprimer l'élève : {firstname_student}, {name_student}, classe :{classe_student} email :,{email_student}")
-    print(banner)
+    else:
+        delete_students_choice(firstname_student, name_student, email_student, classe_student)
+        print(
+            f"Vous avez bien réussi à supprimer l'élève : {firstname_student}, {name_student}, classe :{classe_student} email :,{email_student}")
+        print(banner)
 
 banner = ("Merci de choisir une option : \n\n"
           "1. Afficher l’ordre en classe\n"
@@ -60,6 +65,3 @@ while True:
     except ValueError:
         print("Merci de rentrer un nombre de la liste \n")
         print(banner)
-
-
-
