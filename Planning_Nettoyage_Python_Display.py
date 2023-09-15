@@ -2,10 +2,35 @@
 # Made by Christophe Fonseca Diogo
 # 01.09.2023
 # Version 1
-
-
 from Planning_Nettoyage_Python_Data import *
+def ask_infos_add():
+    print("Vous avez choisi d'ajouter un élève \n")
+    firstname_student = input("Merci de rentrer le prénom de l'élève : ")
+    name_student = input("Merci de rentrer le nom de l'élève : ")
+    classe_student = input("Merci de rentrer la classe de l'élève : ")
+    email_student = input("Merci de rentrer l'email de l'élève : ")
+    if firstname_student or name_student or classe_student or email_student == None:
+        print("Il manque une information !")
+        print(banner)
+    else:
+        add_students_choice(firstname_student, name_student, email_student, classe_student)
+        print(
+            f"Vous avez bien réussi à ajouter l'élève : {firstname_student}, {name_student}, classe :{classe_student} email :,{email_student}")
+        print(banner)
 
+def ask_infos_delete():
+    print("Vous avez choisi de supprimer un élève \n")
+    firstname_student = input("Merci de rentrer le prénom de l'élève que vous voulez supprimer : ")
+    name_student = input("Merci de rentrer le nom de l'élève que vous voulez supprimer : ")
+    classe_student = input("Merci de rentrer la classe de l'élève que vous voulez supprimer : ")
+    email_student = input("Merci de rentrer l'email de l'élève que vous voulez supprimer : ")
+    if firstname_student or name_student or email_student or classe_student == None:
+        print("Il manque une information !")
+        print(banner)
+    delete_students_choice(firstname_student, name_student, email_student, classe_student)
+    print(
+        f"Vous avez bien réussi à supprimer l'élève : {firstname_student}, {name_student}, classe :{classe_student} email :,{email_student}")
+    print(banner)
 
 banner = ("Merci de choisir une option : \n\n"
           "1. Afficher l’ordre en classe\n"
@@ -26,23 +51,9 @@ while True:
             print("Choix invalide merci de rentrer un un nombre du menu \n ")
             print(banner)
         if choice == 4:
-            print("Vous avez choisi de supprimer un élève \n")
-            firstname_student = input("Merci de rentrer le prénom de l'élève que vous voulez supprimer : ")
-            name_student = input("Merci de rentrer le nom de l'élève que vous voulez supprimer : ")
-            classe_student = input("Merci de rentrer la classe de l'élève que vous voulez supprimer : ")
-            email_student = input("Merci de rentrer l'email de l'élève que vous voulez supprimer : ")
-            delete_students_choice(firstname_student,name_student,email_student,classe_student)
-            print(f"Vous avez bien réussi à supprimer l'élève : {firstname_student}, {name_student}, classe :{classe_student} email :,{email_student}")
-            print(banner)
+            ask_infos_delete()
         if choice == 5:
-            print("Vous avez choisi d'ajouter un élève \n")
-            firstname_student = input("Merci de rentrer le prénom de l'élève : ")
-            name_student = input("Merci de rentrer le nom de l'élève : ")
-            classe_student = input("Merci de rentrer la classe de l'élève : ")
-            email_student = input("Merci de rentrer l'email de l'élève : ")
-            add_students_choice(firstname_student,name_student,email_student,classe_student)
-            print(f"Vous avez bien réussi à ajouter l'élève : {firstname_student}, {name_student}, classe :{classe_student} email :,{email_student}")
-            print(banner)
+            ask_infos_add()
         if choice == 7:
             print("Vous avez quitter le programme\n")
             exit()
