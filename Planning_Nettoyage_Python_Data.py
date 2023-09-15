@@ -90,6 +90,16 @@ def add_students_choice(firstname, lastname, student_email, class_id):
     cursor.close()
     return inserted_id
 
+
+def delete_students_choice(firstname, lastname, student_email, class_id):
+    query = "DELETE FROM students WHERE firstname = %s AND lastname = %s AND email = %s AND class_id = %s"
+    cursor = db_connection.cursor()
+    cursor.execute(query, (firstname, lastname, student_email, get_classe_id(class_id)))
+    inserted_id = cursor.lastrowid
+    cursor.close()
+    return inserted_id
+
+
 open_dbconnection()
 delete_data()
 close_dbconnection()

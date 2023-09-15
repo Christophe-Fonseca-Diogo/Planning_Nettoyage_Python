@@ -25,6 +25,15 @@ while True:
         if choice < 1 or choice > 7:
             print("Choix invalide merci de rentrer un un nombre du menu \n ")
             print(banner)
+        if choice == 4:
+            print("Vous avez choisi de supprimer un élève \n")
+            firstname_student = input("Merci de rentrer le prénom de l'élève que vous voulez supprimer : ")
+            name_student = input("Merci de rentrer le nom de l'élève que vous voulez supprimer : ")
+            classe_student = input("Merci de rentrer la classe de l'élève que vous voulez supprimer : ")
+            email_student = input("Merci de rentrer l'email de l'élève que vous voulez supprimer : ")
+            delete_students_choice(firstname_student,name_student,email_student,classe_student)
+            print(f"Vous avez bien réussi à supprimer l'élève : {firstname_student}, {name_student}, classe :{classe_student} email :,{email_student}")
+            print(banner)
         if choice == 5:
             print("Vous avez choisi d'ajouter un élève \n")
             firstname_student = input("Merci de rentrer le prénom de l'élève : ")
@@ -32,7 +41,7 @@ while True:
             classe_student = input("Merci de rentrer la classe de l'élève : ")
             email_student = input("Merci de rentrer l'email de l'élève : ")
             add_students_choice(firstname_student,name_student,email_student,classe_student)
-            print("Vous avez bien réussi à ajouter l'élève !")
+            print(f"Vous avez bien réussi à ajouter l'élève : {firstname_student}, {name_student}, classe :{classe_student} email :,{email_student}")
             print(banner)
         if choice == 7:
             print("Vous avez quitter le programme\n")
