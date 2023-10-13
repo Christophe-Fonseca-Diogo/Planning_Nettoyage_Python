@@ -6,22 +6,8 @@ from Planning_Nettoyage_Python_Data import *
 from Planning_Nettoyage_Python_Importation import *
 import mysql.connector
 
-class NotAMondayException(Exception):
-    pass
-
 class dateexception(Exception):
     pass
-
-def is_a_monday(date_to_check):
-    """
-    check if the date is a monday
-    :param date: date to check
-    :return: true if monday, false otherwise
-    """
-    if date_to_check.weekday() != 0:
-        return False
-    else:
-        return True
 
 def generate_planning():
     print("Vous avez choisi de généré le planning \n")
@@ -67,6 +53,18 @@ def generate_planning():
 
         close_dbconnection()
 
+
+def validation_planning(start_date, end_date):
+    while True:
+        date_user = input("Merci de mettre la date du jour : ")
+        try:
+            date_user = datetime.datetime.strptime(start_date, '%j.%m.%Y')
+            if end_date >= date_user >= start_date:
+                break
+        except:
+            print("Merci de rentrer une date valide !")
+        else:
+            print(date_user)
 
 
 
