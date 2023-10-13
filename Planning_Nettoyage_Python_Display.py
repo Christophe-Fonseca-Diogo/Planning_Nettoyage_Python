@@ -6,42 +6,114 @@ from Planning_Nettoyage_Python_Data import *
 from Planning_Nettoyage_Python_Importation import *
 import mysql.connector
 
+class NotAMondayException(Exception):
+    pass
+
+class dateexception(Exception):
+    pass
+
+def is_a_monday(date_to_check):
+    """
+    check if the date is a monday
+    :param date: date to check
+    :return: true if monday, false otherwise
+    """
+    if date_to_check.weekday() != 0:
+        return False
+    else:
+        return True
+
+def generate_planning():
+    print("Vous avez choisi de généré le planning \n")
+    while True:
+        try:
+            classe_student = get_classe_id(input("Merci de rentrer la classe de l'élève : "))
+            break
+        except:
+            print("Merci de rentrer une classe valide")
+    while True:
+        try:
+            students_id = get_students_id(classe_student)
+            break
+        except:
+            print("Merci de rentrer une classe valide")
+    while True:
+        start_date = input("Merci de rentrer la date de début du planning : ")
+        try:
+            start_date = datetime.datetime.strptime(start_date, '%j.%m.%Y')
+            if start_date.weekday() == 0:
+                end_date = start_date + datetime.timedelta(days=4)
+                break
+            else:
+                print("Ce n'est pas un lundi !")
+        except:
+            print("Mauvais format de date merci de faire le format : jj.mm.YYYY")
+
+    weeks = {}
+    nb_weeks = int(input("Générer pour combien de semaines ? : "))
+
+    while nb_weeks != 0:
+        weeks[start_date] = end_date
+        start_date += datetime.timedelta(days=7)
+        end_date += datetime.timedelta(days=7)
+        nb_weeks -= 1
+
+    if classe_student == None or start_date == '' or end_date == '':
+        print("Il manque une information !")
+
+    else:
+        planing_generator(classe_student, students_id, weeks)
+        print(f"Vous avez généré le planning !\n")
+
+        close_dbconnection()
+
+
+
+
 def ask_infos_add():
-    open_dbconnection()
+    
     print("Vous avez choisi d'ajouter un élève \n")
     firstname_student = input("Merci de rentrer le prénom de l'élève : ")
     name_student = input("Merci de rentrer le nom de l'élève : ")
     while True:
-        try :
+        try:
             classe_student = get_classe_id(input("Merci de rentrer la classe de l'élève : "))
             break
         except:
             print("Merci de rentrer une classe valide")
     email_student = input("Merci de rentrer l'email de l'élève : ")
 
-    if firstname_student==None or name_student==None or classe_student==None or email_student == None:
+    if firstname_student == "" or name_student == "" or email_student == "" or classe_student == "":
         print("Il manque une information !")
-        print(banner)
+
     else:
         add_students_choice(firstname_student, name_student, email_student, classe_student)
         print(
             f"Vous avez bien réussi à ajouter l'élève : {firstname_student}, {name_student}, classe :{classe_student} email :,{email_student}")
-        print(banner)
+
+    close_dbconnection()
 
 def ask_infos_delete():
+    
     print("Vous avez choisi de supprimer un élève \n")
     firstname_student = input("Merci de rentrer le prénom de l'élève que vous voulez supprimer : ")
     name_student = input("Merci de rentrer le nom de l'élève que vous voulez supprimer : ")
-    classe_student = input("Merci de rentrer la classe de l'élève que vous voulez supprimer : ")
+    while True:
+        try :
+            classe_student = input("Merci de rentrer la classe de l'élève : ")
+            break
+        except:
+            print("Merci de rentrer une classe valide")
     email_student = input("Merci de rentrer l'email de l'élève que vous voulez supprimer : ")
-    if firstname_student or name_student or email_student or classe_student == None:
+    if firstname_student == '' or name_student == '' or email_student == '' or classe_student == '':
         print("Il manque une information !")
-        print(banner)
     else:
         delete_students_choice(firstname_student, name_student, email_student, classe_student)
         print(
             f"Vous avez bien réussi à supprimer l'élève : {firstname_student}, {name_student}, classe :{classe_student} email :,{email_student}")
-        print(banner)
+
+    close_dbconnection()
+
 
 banner = ("Merci de choisir une option : \n\n"
           "1. Afficher l’ordre en classe\n"
@@ -52,22 +124,23 @@ banner = ("Merci de choisir une option : \n\n"
           "6. Générer le document « Ordre en classe »\n"
           "7. Sortir du menu\n")
 
-print(banner)
-
 while True:
-    open_dbconnection()
     try:
+        open_dbconnection()
+        print(banner)
         choice = int(input("Votre option : \n"))
         if choice < 1 or choice > 7:
             print("Choix invalide merci de rentrer un un nombre du menu \n ")
-            print(banner)
+    
+        if choice == 2:
+            delete_data_planning()
+            generate_planning()
         if choice == 4:
             ask_infos_delete()
         if choice == 5:
             ask_infos_add()
         if choice == 7:
-            print("Vous avez quitter le programme\n")
+            print("Vous avez quitté le programme\n")
             exit()
     except ValueError:
         print("Merci de rentrer un nombre de la liste \n")
-        print(banner)

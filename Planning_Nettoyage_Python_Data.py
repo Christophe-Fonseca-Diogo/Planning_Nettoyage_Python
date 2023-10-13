@@ -5,7 +5,7 @@
 
 from Planning_Nettoyage_Python_Importation import *
 import mysql.connector
-
+import datetime
 def open_dbconnection():
     global db_connection
     db_connection = mysql.connector.connect(host='127.0.0.1', port='3306',
@@ -36,3 +36,12 @@ def delete_students_choice(firstname, lastname, student_email, class_id):
     cursor.close()
     return inserted_id
 
+def planing_generator(class_id, students_id, weeks):
+    i = 0
+    max = len(students_id)
+    for week in weeks:
+        query = "INSERT INTO classes_clean_students (class_id, student_id, start_date, end_date) values (%s, %s, %s, %s)"
+        cursor = db_connection.cursor()
+        cursor.execute(query, (class_id, students_id[i][0], week, weeks[week]))
+        cursor.close()
+        i = (i + 1) % max

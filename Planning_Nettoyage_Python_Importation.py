@@ -38,6 +38,14 @@ def get_classe_id(classe_name):
     cursor.close()
     return row[0]
 
+def get_students_id(classe_id):
+    query = "SELECT id FROM students WHERE class_id = %s"
+    cursor = db_connection.cursor()
+    cursor.execute(query, (classe_id,))
+    rows = cursor.fetchall()
+    cursor.close()
+    return rows
+
 def add_student(firstname, lastname, student_email,class_id):
     query = "INSERT INTO students (firstname, lastname, email, class_id) values (%s, %s, %s, %s)"
     cursor = db_connection.cursor()
@@ -50,13 +58,26 @@ def delete_data():
     query = "SET FOREIGN_KEY_CHECKS = 0"
     query2 = "TRUNCATE table classes"
     query3 = "TRUNCATE table students"
-    query4 = "SET FOREIGN_KEY_CHECKS = 1"
+    query4 = "TRUNCATE table classes_clean_students"
+    query5 = "SET FOREIGN_KEY_CHECKS = 1"
 
     cursor = db_connection.cursor()
     cursor.execute(query)
     cursor.execute(query2)
     cursor.execute(query3)
     cursor.execute(query4)
+    cursor.execute(query5)
+    cursor.close()
+
+def delete_data_planning():
+    query = "SET FOREIGN_KEY_CHECKS = 0"
+    query2 = "TRUNCATE table classes_clean_students"
+    query3 = "SET FOREIGN_KEY_CHECKS = 1"
+
+    cursor = db_connection.cursor()
+    cursor.execute(query)
+    cursor.execute(query2)
+    cursor.execute(query3)
     cursor.close()
 
 def open_classes_fromcsv():
