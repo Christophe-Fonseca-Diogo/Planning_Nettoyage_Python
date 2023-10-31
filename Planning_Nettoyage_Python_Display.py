@@ -54,20 +54,16 @@ def generate_planning():
         close_dbconnection()
 
 
-def validation_planning(start_date, end_date):
+def validation_planning():
     while True:
-        date_user = input("Merci de mettre la date du jour : ")
+        date_user = input("Merci de mettre la date du jour [Format jj.mm.YYYY] : ")
         try:
-            date_user = datetime.datetime.strptime(start_date, '%j.%m.%Y')
-            if end_date >= date_user >= start_date:
-                break
+            date_user = datetime.datetime.strptime(date_user, '%j.%m.%Y')
+            date_user += datetime.timedelta(days=(0 - date_user.weekday()))
         except:
             print("Merci de rentrer une date valide !")
         else:
-            print(date_user)
-
-
-
+            print(validate_week(date_user))
 def ask_infos_add():
     
     print("Vous avez choisi d'ajouter un élève \n")
@@ -133,6 +129,8 @@ while True:
         if choice == 2:
             delete_data_planning()
             generate_planning()
+        if choice == 3:
+            validation_planning()
         if choice == 4:
             ask_infos_delete()
         if choice == 5:

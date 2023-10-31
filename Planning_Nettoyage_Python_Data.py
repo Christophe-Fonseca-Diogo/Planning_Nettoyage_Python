@@ -45,3 +45,12 @@ def planing_generator(class_id, students_id, weeks):
         cursor.execute(query, (class_id, students_id[i][0], week, weeks[week]))
         cursor.close()
         i = (i + 1) % max
+
+
+def validate_week(date):
+    query = "SELECT id FROM classes_clean_students WHERE start_date = %s"
+    cursor = db_connection.cursor()
+    cursor.execute(query, (date,))
+    rows = cursor.fetchall()
+    cursor.close()
+    return rows
