@@ -5,9 +5,12 @@
 from Planning_Nettoyage_Python_Data import *
 from Planning_Nettoyage_Python_Importation import *
 import mysql.connector
+import datetime
+
 
 class dateexception(Exception):
     pass
+
 
 def generate_planning():
     print("Vous avez choisi de généré le planning \n")
@@ -55,58 +58,85 @@ def generate_planning():
 
 
 def validation_planning():
+    print("Vous avez choisi de valider le planning  \n")
     while True:
-        date_user = input("Merci de mettre la date du jour [Format jj.mm.YYYY] : ")
-        try:
-            date_user = datetime.datetime.strptime(date_user, '%j.%m.%Y')
-            date_user += datetime.timedelta(days=(0 - date_user.weekday()))
-        except:
-            print("Merci de rentrer une date valide !")
+        firstname = input("Entrez le prénom de l'élève : ")
+        lastname = input("Entrez le nom de l'élève : ")
+        class_name = input("Entrez le nom de la classe de l'élève : ")
+
+        # Vérifier si le nom, le prénom et la classe existent dans la base de données
+        student_id = get_student_id(lastname, firstname, class_name)
+        classe_id = get_classe_id(class_name)
+
+        if student_id is None or classe_id is None:
+            print("Aucun élève trouvé avec ces informations . Veuillez réessayer.")
         else:
-            print(validate_week(date_user))
+            try:
+                # Demander à l'utilisateur d'entrer la date de début du nettoyage
+                start_date_str = input("Entrez la date de début du nettoyage (format jj.mm.YYYY) : ")
+                start_date = datetime.datetime.strptime(start_date_str, '%d.%m.%Y').date()
+
+                # Demander à l'utilisateur d'entrer la date de fin du nettoyage
+                end_date_str = input("Entrez la date de fin du nettoyage (format jj.mm.YYYY) : ")
+                end_date = datetime.datetime.strptime(end_date_str, '%d.%m.%Y').date()
+
+                res = validate_cleaning(classe_id, student_id, start_date, end_date)
+                if not res:
+                    print("Échec de la validation.")
+                else:
+                    print("Validation réussie.")
+                    break
+            except ValueError as exc:
+                print(f"Erreur : {exc}")
+
+
 def ask_infos_add():
-    
     print("Vous avez choisi d'ajouter un élève \n")
-    firstname_student = input("Merci de rentrer le prénom de l'élève : ")
-    name_student = input("Merci de rentrer le nom de l'élève : ")
     while True:
+        firstname_student = input("Merci de rentrer le prénom de l'élève : ")
+        name_student = input("Merci de rentrer le nom de l'élève : ")
         try:
             classe_student = get_classe_id(input("Merci de rentrer la classe de l'élève : "))
-            break
+            if classe_student is not None:
+                break
+            else:
+                print("Classe invalide. Veuillez réessayer.")
         except:
-            print("Merci de rentrer une classe valide")
+            print("Erreur lors de la recherche de la classe. Veuillez réessayer.")
+
     email_student = input("Merci de rentrer l'email de l'élève : ")
 
     if firstname_student == "" or name_student == "" or email_student == "" or classe_student == "":
         print("Il manque une information !")
-
     else:
         add_students_choice(firstname_student, name_student, email_student, classe_student)
         print(
-            f"Vous avez bien réussi à ajouter l'élève : {firstname_student}, {name_student}, classe :{classe_student} email :,{email_student}")
+            f"Vous avez bien réussi à ajouter l'élève : {firstname_student}, {name_student}, classe : {classe_student}, email : {email_student}")
+        close_dbconnection()
 
-    close_dbconnection()
 
 def ask_infos_delete():
-    
     print("Vous avez choisi de supprimer un élève \n")
-    firstname_student = input("Merci de rentrer le prénom de l'élève que vous voulez supprimer : ")
-    name_student = input("Merci de rentrer le nom de l'élève que vous voulez supprimer : ")
     while True:
-        try :
-            classe_student = input("Merci de rentrer la classe de l'élève : ")
+        firstname_student = input("Merci de rentrer le prénom de l'élève que vous voulez supprimer : ")
+        name_student = input("Merci de rentrer le nom de l'élève que vous voulez supprimer : ")
+        classe_student = input("Merci de rentrer la classe de l'élève : ")
+
+        # Vérifier si l'élève et la classe existent dans la base de données
+        student_id = get_student_id(firstname_student, name_student, classe_student)
+        if student_id is not None:
             break
-        except:
-            print("Merci de rentrer une classe valide")
+        else:
+            print("Elève introuvable ou classe invalide. Veuillez réessayer.")
+
     email_student = input("Merci de rentrer l'email de l'élève que vous voulez supprimer : ")
+
     if firstname_student == '' or name_student == '' or email_student == '' or classe_student == '':
-        print("Il manque une information !")
+        print("Informations manquantes ! La suppression n'a pas été effectuée.")
     else:
         delete_students_choice(firstname_student, name_student, email_student, classe_student)
         print(
-            f"Vous avez bien réussi à supprimer l'élève : {firstname_student}, {name_student}, classe :{classe_student} email :,{email_student}")
-
-    close_dbconnection()
+            f"Vous avez bien réussi à supprimer l'élève : {firstname_student}, {name_student}, classe : {classe_student}, email : {email_student}")
 
 
 banner = ("Merci de choisir une option : \n\n"
@@ -125,7 +155,7 @@ while True:
         choice = int(input("Votre option : \n"))
         if choice < 1 or choice > 7:
             print("Choix invalide merci de rentrer un un nombre du menu \n ")
-    
+
         if choice == 2:
             delete_data_planning()
             generate_planning()

@@ -5,7 +5,7 @@
 
 import mysql.connector
 import csv
-
+import datetime
 filename_classes = "classes.csv"
 filename_students = "students.csv"
 
@@ -36,7 +36,11 @@ def get_classe_id(classe_name):
     cursor.execute(query, (classe_name,))
     row = cursor.fetchone()
     cursor.close()
-    return row[0]
+    if row is not None:
+        return row[0]
+    else:
+        return None
+
 
 def get_students_id(classe_id):
     query = "SELECT id FROM students WHERE class_id = %s"
@@ -46,6 +50,14 @@ def get_students_id(classe_id):
     cursor.close()
     return rows
 
+def get_student_id(lastname, firstname, name):
+    query = "SELECT id FROM students WHERE lastname = %s AND firstname = %s AND class_id IN (SELECT id FROM classes WHERE name = %s)"
+    cursor = db_connection.cursor()
+    cursor.execute(query, (lastname, firstname, name))
+    row = cursor.fetchone()
+    cursor.close()
+    return row[0] if row else None
+
 def add_student(firstname, lastname, student_email,class_id):
     query = "INSERT INTO students (firstname, lastname, email, class_id) values (%s, %s, %s, %s)"
     cursor = db_connection.cursor()
@@ -53,6 +65,21 @@ def add_student(firstname, lastname, student_email,class_id):
     inserted_id = cursor.lastrowid
     cursor.close()
     return inserted_id
+
+def get_cleaning_date(student_id):
+    try:
+        cursor = db_connection.cursor()
+        query = "SELECT start_date, end_date FROM classes_clean_students WHERE student_id = %s"
+        cursor.execute(query, (student_id,))
+        start_date, end_date = cursor.fetchone()
+        cursor.close()
+        return start_date, end_date  # Retourne les dates séparément
+    except Exception as e:
+        print(f"Erreur lors de la récupération de la date de nettoyage : {e}")
+        return None, None  # Retourne None pour les deux dates en cas d'erreur
+
+
+
 
 def delete_data():
     query = "SET FOREIGN_KEY_CHECKS = 0"

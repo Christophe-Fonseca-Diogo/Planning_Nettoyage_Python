@@ -54,3 +54,31 @@ def validate_week(date):
     rows = cursor.fetchall()
     cursor.close()
     return rows
+
+
+def planning_checker(class_id):
+    query = "SELECT done FROM classes_clean_students WHERE start_date = %s"
+    cursor = db_connection.cursor()
+    cursor.execute(query, (class_id))
+    rows = cursor.fetchall()
+    cursor.close()
+    return rows
+
+
+def validate_cleaning(classe_id, student_id, start_date, end_date):
+    try:
+        cursor = db_connection.cursor()
+        query = "UPDATE classes_clean_students SET done = 1 WHERE class_id = %s AND start_date <= %s AND end_date >= %s AND student_id = %s"
+        data_cleaning = (classe_id, start_date, end_date, student_id)
+        cursor.execute(query, data_cleaning)
+        affected_rows = cursor.rowcount
+        cursor.close()
+        if affected_rows == 1:
+            return True
+        else:
+            return False
+    except mysql.connector.Error as err:
+        print("Erreur SQL : ", err)
+        return False
+
+
